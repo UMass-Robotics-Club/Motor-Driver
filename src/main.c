@@ -3,7 +3,6 @@
 #include "spark.h"
 #include "ak60.h"
 #include "can.h"
-#include "spi.h"
 #include "config.h"
 
 int main() {
@@ -22,18 +21,20 @@ int main() {
                     0, // pid_slot
                     0, // arbitrary_feedforward_units (0 is voltage)
                 };
-                spi_write(&header, sizeof(header));
-                spi_write(&arbitration, sizeof(arbitration));
-                spi_write(&data, sizeof(data));
+                
+                fwrite(&header, sizeof(header), 1, stdout);
+                fwrite(&arbitration, sizeof(arbitration), 1, stdout);
+                fwrite(&data, sizeof(data), 1, stdout);
                 break;
             }
             case AK60: {
                 can_command_header_t header = {configs[i].can_channel, AK60_POSITION_SETPOINT_LENGTH};
                 uint32_t arbitration = configs[i].motor_id | AK60_POSITION_SETPOINT_FRAME_ID;
                 int32_t data = positions[i] * 10000.0;
-                spi_write(&header, sizeof(header));
-                spi_write(&arbitration, sizeof(arbitration));
-                spi_write(&data, sizeof(data));
+
+                fwrite(&header, sizeof(header), 1, stdout);
+                fwrite(&arbitration, sizeof(arbitration), 1, stdout);
+                fwrite(&data, sizeof(data), 1, stdout);
                 break;
             }
             }
