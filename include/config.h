@@ -17,10 +17,10 @@ typedef struct {
 // Configure Motors
 //////////////////////////
 motor_config_t configs[NUM_MOTORS] = {
-    {0,SPARK_MAX,0},
-    {1,SPARK_MAX,0},
-    {2,SPARK_MAX,0},
-    {3,SPARK_MAX,0},
-    {4,SPARK_MAX,0},
-    {5,SPARK_MAX,0},
+    {0,SPARK_MAX,0}, // shoulder pitch left
+    {1,SPARK_MAX,0}, // shoulder pitch right
+    {2,AK60,0}, // bicep left
+    {3,AK60,0}, // bicep right
+    {4,SPARK_MAX,0}, // shoulder roll left
+    {5,SPARK_MAX,0}, // shoulder roll right
 };

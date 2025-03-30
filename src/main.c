@@ -8,7 +8,7 @@
 int main() {
     float positions[NUM_MOTORS];
     while(1) {
-        fread(positions, sizeof(positions), 1, stdin);
+        fread(positions, sizeof(float), NUM_MOTORS, stdin);
         for(int i = 0; i < NUM_MOTORS; i++) {
             switch (configs[i].motor_type)
             {
@@ -30,7 +30,7 @@ int main() {
             case AK60: {
                 can_command_header_t header = {configs[i].can_channel, AK60_POSITION_SETPOINT_LENGTH};
                 uint32_t arbitration = configs[i].motor_id | AK60_POSITION_SETPOINT_FRAME_ID;
-                int32_t data = positions[i] * 10000.0;
+                int32_t data = (int32_t)(positions[i] * 10000.0);
 
                 fwrite(&header, sizeof(header), 1, stdout);
                 fwrite(&arbitration, sizeof(arbitration), 1, stdout);
