@@ -8,7 +8,9 @@
 int main() {
     float positions[NUM_MOTORS];
     while(1) {
-        fread(positions, sizeof(float), NUM_MOTORS, stdin);
+        if(fread(positions, sizeof(float), NUM_MOTORS, stdin) != NUM_MOTORS)
+            return 1;
+        
         for(int i = 0; i < NUM_MOTORS; i++) {
             switch (configs[i].motor_type)
             {
