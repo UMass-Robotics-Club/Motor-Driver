@@ -30,6 +30,10 @@
 
 #include <stdint.h>
 
+#include "rev/CANCommonParameters.h"
+
+extern "C" {
+
 typedef enum {
     c_Spark_kParamOK = 0,
     c_Spark_kInvalidID = 1,
@@ -240,3 +244,16 @@ typedef enum {
     c_Spark_kDutyCycleEncoderEndPulseUs = 197,
     c_Spark_NumParameters
 } c_Spark_ConfigParameter;
+
+c_REVLib_ParameterType c_Spark_GetParameterType(
+    c_Spark_ConfigParameter parameterId);
+
+uint32_t c_Spark_GetParameterDefaultValue(c_Spark_ConfigParameter parameterId);
+
+const char* c_Spark_GetParameterName(c_Spark_ConfigParameter parameterId);
+
+// For debugging purposes, to verify internal state.
+c_Spark_ConfigParameter c_Spark_GetConfigParameter(
+    c_Spark_ConfigParameter parameterId);
+
+}  // extern "C"

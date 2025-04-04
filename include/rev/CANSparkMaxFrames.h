@@ -29,7 +29,10 @@
 #pragma once
 
 #include <stdint.h>
-#include <stdlib.h>
+
+#include <cstddef>
+
+extern "C" {
 
 /*********CAN ID Defines***********/
 
@@ -259,3 +262,5 @@ typedef struct {
 #endif
 
 #undef PACKED
+
+}  // extern "C"
