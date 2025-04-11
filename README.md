@@ -1,21 +1,17 @@
 # Motor-Driver
-A simple C program that takes a list of positions from standard in and outputs them as formatted CAN commands for our CAN board on standard out.
+A simple python program that takes a list of positions from standard in and outputs them as formatted CAN commands for our CAN board over SPI.
 
-## Configuration
-Configuration is done based on the motor definitions in [config.h](./include/config.h). NOTE: CAN channels are 0 based indexing.
+# Install
+1. Setup a python3 virtual env
+```
+python3 -m venv ./venv
+source ./venv/bin/activate
+```
 
-## Build Instructions
-1. Make a build folder inside `code`
+2. Install requirements
 ```
-mkdir build
-cd build
+pip install -r requirements.txt
 ```
-2. Create the make files thorough cmake
-```
-cmake ..
-```
-3. Build the firmware using make
-```
-make
-```
-4. The output files should be inside the `build` folder
+
+# Position format
+Positions will be read as an array of 6 little endien floats (24 bytes total). The driver will wait for all 6 positions before sending the new positions to the motors. If it does not recive new positions for more than TIMEOUT seconds, it will enter emergency shutdown where it will turn set all motors to 0 power then exit.
