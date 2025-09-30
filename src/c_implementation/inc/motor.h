@@ -53,10 +53,12 @@ void motor_enable(uint8_t id, uint16_t master_id);
 void motor_controlmode(uint8_t id, float torque, float MechPosition, float speed, float kp, float kd);
 
 
+void motor_reset(uint8_t id, uint16_t master_id);
 
-/*
-#define can_txd() can_message_transmit(CAN0, &txMsg)
-#define can_rxd() can_message_receive(CAN0, CAN_FIFO1, &rxMsg)
-*/
+
+void motor_modechange(uint8_t id, uint16_t master_id);
+
+
+void motor_write(uint8_t id, uint16_t master_id);
 
 #endif //MOTOR_H

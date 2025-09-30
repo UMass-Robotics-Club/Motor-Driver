@@ -10,6 +10,20 @@ struct can_transmit_message_struct txMsg={
 };
 
 
+int spi_txd(){
+    //#define can_txd() can_message_transmit(CAN0, &txMsg)
+
+
+
+}
+
+/*
+#define can_rxd() can_message_receive(CAN0, CAN_FIFO1, &rxMsg)
+*/
+
+
+
+
 int float_to_uint(float x, float x_min, float x_max, int bits){
 
     float span = x_max - x_min;
@@ -23,6 +37,7 @@ int float_to_uint(float x, float x_min, float x_max, int bits){
 }
 
 
+
 void motor_enable(uint8_t id, uint16_t master_id)
 {
     txCanIdEx.mode = 3;
@@ -31,7 +46,9 @@ void motor_enable(uint8_t id, uint16_t master_id)
     txCanIdEx.data = master_id;
     txMsg.tx_dlen = 8;
     txCanIdEx.data = 0;
+
     //can_txd();
+    spi_txd();
 }
 
 
@@ -51,6 +68,66 @@ void motor_controlmode(uint8_t id, float torque, float MechPosition, float speed
     txMsg.tx_data[5]=float_to_uint(kp,KP_MIN,KP_MAX,16);
     txMsg.tx_data[6]=float_to_uint(kd,KD_MIN,KD_MAX,16)>>8;
     txMsg.tx_data[7]=float_to_uint(kd,KD_MIN,KD_MAX,16);
+
     //can_txd();
+    spi_txd();
+}
+
+
+
+void motor_reset(uint8_t id, uint16_t master_id)
+{
+    txCanIdEx.mode = 4;
+    txCanIdEx.id = id;
+    txCanIdEx.res = 0;
+    txCanIdEx.data = master_id;
+    txMsg.tx_dlen = 8;
+    
+    for(uint8_t i=0; i<8; i++){ txMsg.tx_data[i]=0; }
+
+    //can_txd();
+    spi_txd();
+}
+
+
+//this function needs comments
+uint8_t runmode;
+uint16_t index;
+void motor_modechange(uint8_t id, uint16_t master_id)
+{
+    txCanIdEx.mode = 0x12;
+    txCanIdEx.id = id;
+    txCanIdEx.res = 0;
+    txCanIdEx.data = master_id;
+    txMsg.tx_dlen = 8;
+    
+    for(uint8_t i=0; i<8; i++){ txMsg.tx_data[i]=0; }
+
+    memcpy(&txMsg.tx_data[0],&index,2);
+    memcpy(&txMsg.tx_data[4],&runmode, 1);
+    
+    //can_txd();
+    spi_txd();
+}
+
+
+
+//this function needs comments
+float ref;
+void motor_write(uint8_t id, uint16_t master_id)
+{
+    txCanIdEx.mode = 0x12;
+    txCanIdEx.id = id;
+    txCanIdEx.res = 0;
+    txCanIdEx.data = master_id;
+    txMsg.tx_dlen = 8;
+
+    for(uint8_t i=0; i<8; i++){ txMsg.tx_data[i]=0; }
+    
+    memcpy(&txMsg.tx_data[0],&index,2);
+    memcpy(&txMsg.tx_data[4],&ref,4);
+
+    //can_txd();
+    spi_txd();
 }
 
