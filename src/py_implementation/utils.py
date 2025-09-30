@@ -10,6 +10,8 @@ AK60_POWER_SETPOINT = 0x00
 SPARK_POSITION_SETPOINT = 0x2050100
 ROBORIO_HEARTBEAT = 0x01011840
 
+
+
 def gen_can_header(channel: int, data: int, arbitration: int) -> bytes:
     return (channel + (data << 3)).to_bytes() + arbitration.to_bytes(4, "little", signed=False)
 
