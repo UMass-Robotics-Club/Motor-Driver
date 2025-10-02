@@ -2,30 +2,18 @@
 #include "jetgpio.h"
 
 
-int jetson_spi_setup(int spi_channel){
-    unsigned int handle = spiOpen(spi_channel, 5000000, 0, 0, 8, 1, 1);
-
-    if (handle < 0){
-        return -1; //spi does not setup correctly
-    }
-
-    return handle;
-}
-
-int jetson_spi_txd(unsigned int spi_handle, char* packet, char* rxBuf){
-    
-    size_t packet_len = sizeof(packet) / sizeof(packet[0]);
-    unsigned int len = (unsigned int)packet_len;
+int jetson_spi_tx(unsigned int spi_handle, char* packet, char* rxBuf){
 
     if (spi_handle < 0){
         printf("SPI was not setup correctly. Transfer cancelled.");
         return -1;
     }
 
-    for (int i=0; i<len; i++){
-        spiXfer(spi_handle, packet, rxBuf, len);
-    }
+    size_t packet_len = sizeof(packet) / sizeof(packet[0]);
+    unsigned int len = (unsigned int)packet_len; //number of bytes to send
 
+    spiXfer(spi_handle, packet, rxBuf, len);
+    
     return 0;
 }
 
@@ -59,8 +47,7 @@ char* gen_can_header_mit(char channel,  char mode, char motor_id, char* data){
 }
 
 
-
-int motor_enable(char channel, char mode, char motor_id){
+char* motor_enable(int spi_handle, char channel, char mode, char motor_id){
 
     unsigned char data[8];
 
@@ -70,8 +57,17 @@ int motor_enable(char channel, char mode, char motor_id){
 
     data[7] = 0xFC;
 
-    gen_can_header_mit(channel, mode, motor_id, data);
+    char rxBuf[11];
 
-    return 0;
+    char* packet = gen_can_header_mit(channel, mode, motor_id, data);
+
+    int spi_err = jetson_spi_tx(spi_handle, packet, rxBuf);
+
+    if (spi_err < 0){
+        printf("SPI Error");
+        return NULL;
+    }
+
+    return rxBuf;
 }
 
