@@ -47,6 +47,34 @@ char* gen_can_header_mit(char channel,  char mode, char motor_id, char* data){
 }
 
 
+char* motor_mit_mode(unsigned int spi_handle, char channel, char mode){
+
+    //0x 0F FF 01 02 03 04 05 06 02 00 00
+    //Documentation says this is an extended frame packet, 
+    //so it has an extra 18 bits, and needs its own generate_can_packet implementation.
+    
+    //this will need to be accounted for in the firmware for the SPI-to-CAN board
+
+    //Changes protocol to MIT
+
+    char data = {0x0F, 0xFF, 1, 2, 3, 4, 5, 6, 2, 0, 0};
+
+    
+
+    char rxBuf[11];
+
+    int spi_err = jetson_spi_tx(spi_handle, packet, rxBuf); //error code
+
+    if (spi_err < 0){
+        printf("SPI Error");
+        return NULL;
+    }
+
+    return rxBuf;   
+    //response frame gives us motor ID (11 bits) followed by the MCU ID
+}
+
+
 char* motor_enable(int spi_handle, char channel, char mode, char motor_id){
 
     unsigned char data[8];
