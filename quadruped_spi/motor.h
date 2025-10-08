@@ -37,7 +37,7 @@ int jetson_spi_tx(unsigned int spi_handle, uint8_t* packet, uint8_t* rxBuf);
 uint8_t* gen_can_header(char channel,  char mode, char motor_id, char* data);
 
 
-uint8_t* motor_mit(uint16_t angle, uint16_t speed, uint16_t kp, uint16_t kd, uint16_t torque);
+uint8_t* motor_mit(float angle, float speed, float kp, float kd, float torque);
 
 
 #endif //MOTOR_H

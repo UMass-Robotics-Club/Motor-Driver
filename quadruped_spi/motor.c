@@ -74,14 +74,15 @@ uint8_t* motor_mit(float angle, float speed, float kp, float kd, float torque){
     float kd_f;
     float torque_f;
 
-    
+
+
     //range checks
     if (angle > 12.57) angle_f = 12.57;
     else if (angle < -12.57) angle_f = -12.57;
     else angle_f = angle;
 
     if (speed > 44) speed_f = 44;
-    else if (speed < -144) speed_f = -44;
+    else if (speed < -44) speed_f = -44;
     else speed_f = speed;
 
     if (kp > 500) kp_f = 500;
@@ -96,41 +97,51 @@ uint8_t* motor_mit(float angle, float speed, float kp, float kd, float torque){
     else if (torque < -17) torque_f = -17;
     else torque_f = torque;
 
-    //conversions to 2 byte/12-bit representation
 
+
+
+    //conversions to 2 byte/12-bit representation
+    uint16_t angle_int = (uint16_t)(((angle_f + 12.57)*65535)/(12.57*2));
+
+    uint16_t speed_int = (uint16_t)(((speed_f + 44)*4096)/(44*2));
+    
+    uint16_t kp_int = (uint16_t)(kp_f/500 * 4096);
+
+    uint16_t kd_int = (uint16_t)(kd_f/5 * 4096);
+
+    uint16_t torque_int = (uint16_t)(((torque_f + 17)*4096)/(17*2));
 
 
 
 
     //Bit packing
-
     uint8_t data[11];
 
     //Angle
-    data[0] = (angle >> 8) & 0xFF;  //high 8 bits
-    data[1] = angle & 0xFF;  //low 8 bits
+    data[0] = (angle_int >> 8) & 0xFF;  //high 8 bits
+    data[1] = angle_int & 0xFF;  //low 8 bits
 
 
     //Target speed and kp
-    data[2] = (speed >> 4) & 0xFF; //high 8 bits
+    data[2] = (speed_int >> 4) & 0xFF; //high 8 bits
     
-    uint8_t speed_low = (speed >> 8) & 0x0F; //low 4 bits
-    uint8_t kp_high = (kp >> 8) & 0x0F; //high 4 bits
+    uint8_t speed_low = (speed_int >> 8) & 0x0F; //low 4 bits
+    uint8_t kp_high = (kp_int >> 8) & 0x0F; //high 4 bits
 
     data[3] = ((speed_low << 4) | kp_high); //packing kp and speed bits together
     
-    data[4] = (kp >> 4) & 0xFF; //low 8 bits
+    data[4] = (kp_int >> 4) & 0xFF; //low 8 bits
 
     
     //kd and torque
-    data[5] = (kd >> 4) & 0xFF; //8 bits
+    data[5] = (kd_int >> 4) & 0xFF; //8 bits
 
-    uint8_t kd_low = (kd >> 8) & 0x0F; //4 bits
-    uint8_t t_high = (torque >> 8) & 0x0F; //4 bits
+    uint8_t kd_low = (kd_int >> 8) & 0x0F; //4 bits
+    uint8_t t_high = (torque_int >> 8) & 0x0F; //4 bits
 
     data[6] = ((kd_low << 4) | t_high); //packing 
 
-    data[7] = (torque >> 4) & 0xFF;
+    data[7] = (torque_int >> 4) & 0xFF;
     
     return data;
 
