@@ -48,7 +48,7 @@ uint8_t* gen_can_header(char channel,  char mode, char motor_id, char* data){
 }
 
 
-uint8_t* motor_mit(uint16_t angle, uint16_t speed, uint16_t kp, uint16_t kd, uint16_t torque){
+uint8_t* motor_mit(float angle, float speed, float kp, float kd, float torque){
     
     /*Ranges
     --------
@@ -68,15 +68,41 @@ uint8_t* motor_mit(uint16_t angle, uint16_t speed, uint16_t kp, uint16_t kd, uin
     torque: Byte 6[3:0] and Byte 7[8:0]
     */
 
+    float angle_f;
+    float speed_f;
+    float kp_f;
+    float kd_f;
+    float torque_f;
+
     
+    //range checks
+    if (angle > 12.57) angle_f = 12.57;
+    else if (angle < -12.57) angle_f = -12.57;
+    else angle_f = angle;
+
+    if (speed > 44) speed_f = 44;
+    else if (speed < -144) speed_f = -44;
+    else speed_f = speed;
+
+    if (kp > 500) kp_f = 500;
+    else if (kp < 0) kp_f = 0;
+    else kp_f = kp;
+
+    if (kd > 5) kd_f = 5;
+    else if (kd < 0) kd_f = 0;
+    else kd_f = kd;
+
+    if (torque > 17) torque_f = 17;
+    else if (torque < -17) torque_f = -17;
+    else torque_f = torque;
+
+    //conversions to 2 byte/12-bit representation
 
 
-    //ADD RANGE CHECKS HERE
-    //-------------------------
 
 
-    //-------------------------
 
+    //Bit packing
 
     uint8_t data[11];
 
