@@ -68,7 +68,7 @@ uint8_t* motor_mit(uint16_t angle, uint16_t speed, uint16_t kp, uint16_t kd, uin
     torque: Byte 6[3:0] and Byte 7[8:0]
     */
 
-    uint8_t data[11];
+    
 
 
     //ADD RANGE CHECKS HERE
@@ -77,6 +77,8 @@ uint8_t* motor_mit(uint16_t angle, uint16_t speed, uint16_t kp, uint16_t kd, uin
 
     //-------------------------
 
+
+    uint8_t data[11];
 
     //Angle
     data[0] = (angle >> 8) & 0xFF;  //high 8 bits
