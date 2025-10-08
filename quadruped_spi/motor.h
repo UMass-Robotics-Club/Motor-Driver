@@ -3,6 +3,7 @@
 
 //Includes
 #include <stdlib.h>
+#include <stdint.h>
 
 
 
@@ -17,11 +18,26 @@ Bytes 0-7 = Data
 
 */
 
-int jetson_spi_tx(unsigned int spi_handle, char* packet, char* rxBuf);
+//Constant Packets
+#define MIT_MODE_PACKET {0x0F, 0xFF, 1, 2, 3, 4, 5, 6, 2, 0, 0}   
+    /*0x 0F FF 01 02 03 04 05 06 02 00 00
+    Documentation says this is an extended frame packet, 
+    so it has an extra 18 bits, and needs its own generate_can_packet implementation.
+    This will need to be accounted for in the firmware for the SPI-to-CAN board*/
 
-char* gen_can_header_mit(char channel, char mode, char motor_id, char* data);
+#define MOTOR_ENABLE_PACKET {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFC}
+#define MOTOR_DISABLE_PACKET {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFD}
 
-char* motor_enable(int spi_handle, char channel, char mode, char motor_id);
+
+
+
+int jetson_spi_tx(unsigned int spi_handle, uint8_t* packet, uint8_t* rxBuf);
+
+
+uint8_t* gen_can_header(char channel,  char mode, char motor_id, char* data);
+
+
+uint8_t* motor_mit(uint16_t angle, uint16_t speed, uint16_t kp, uint16_t kd, uint16_t torque);
 
 
 #endif //MOTOR_H

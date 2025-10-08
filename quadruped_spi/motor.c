@@ -2,7 +2,7 @@
 #include "jetgpio.h"
 
 
-int jetson_spi_tx(unsigned int spi_handle, char* packet, char* rxBuf){
+int jetson_spi_tx(unsigned int spi_handle, uint8_t* packet, uint8_t* rxBuf){
 
     if (spi_handle < 0){
         printf("SPI was not setup correctly. Transfer cancelled.");
@@ -17,7 +17,8 @@ int jetson_spi_tx(unsigned int spi_handle, char* packet, char* rxBuf){
     return 0;
 }
 
-char* gen_can_header_mit(char channel,  char mode, char motor_id, char* data){
+
+uint8_t* gen_can_header(char channel,  char mode, char motor_id, char* data){
 /*Format: [channel: 1 byte | id: 2 bytes | data: 8 bytes] = 11 bytes
   
   ID is separated into two parts: the mode of operation of the motor (byte 1 bits 0,1,2. 
@@ -29,7 +30,7 @@ char* gen_can_header_mit(char channel,  char mode, char motor_id, char* data){
   The additional channel byte should be used by the Mega CAN board to choose a CAN channel to communicate on.
 */
     
-    unsigned char out[11];
+    uint8_t out[11];
     
     //Channel
     out[0] = channel; //byte 0
@@ -47,55 +48,62 @@ char* gen_can_header_mit(char channel,  char mode, char motor_id, char* data){
 }
 
 
-char* motor_mit_mode(unsigned int spi_handle, char channel, char mode){
-
-    //0x 0F FF 01 02 03 04 05 06 02 00 00
-    //Documentation says this is an extended frame packet, 
-    //so it has an extra 18 bits, and needs its own generate_can_packet implementation.
+uint8_t* motor_mit(uint16_t angle, uint16_t speed, uint16_t kp, uint16_t kd, uint16_t torque){
     
-    //this will need to be accounted for in the firmware for the SPI-to-CAN board
+    /*Ranges
+    --------
+    angle:  0-65535 (-12.57 rad ~ 12.57 rad)
+    speed: 0-4096 (-44 rad/s ~ 44 rad/s)
+    kp: 0-4096 (0 ~ 500)
+    kd: 0-4096 (0 ~ 5)
+    torque: 0-4096 (-17 N·m ~ 17 N·m)*/
 
-    //Changes protocol to MIT
 
-    char data = {0x0F, 0xFF, 1, 2, 3, 4, 5, 6, 2, 0, 0};
+    /*MIT dynamic parameters protocol
+
+    angle: Bytes 0 and 1
+    target speed: Byte 2 and Byte 3 [7:4]
+    kp: Byte 3[3:0] and Byte 4[8:0]
+    kd: Byte 5[8:0] and Byte 6[7:4]
+    torque: Byte 6[3:0] and Byte 7[8:0]
+    */
+
+    uint8_t data[11];
+
+
+    //ADD RANGE CHECKS HERE
+    //-------------------------
+
+
+    //-------------------------
+
+
+    //Angle
+    data[0] = (angle >> 8) & 0xFF;  //high 8 bits
+    data[1] = angle & 0xFF;  //low 8 bits
+
+
+    //Target speed and kp
+    data[2] = (speed >> 4) & 0xFF; //high 8 bits
+    
+    uint8_t speed_low = (speed >> 8) & 0x0F; //low 4 bits
+    uint8_t kp_high = (kp >> 8) & 0x0F; //high 4 bits
+
+    data[3] = ((speed_low << 4) | kp_high); //packing kp and speed bits together
+    
+    data[4] = (kp >> 4) & 0xFF; //low 8 bits
 
     
+    //kd and torque
+    data[5] = (kd >> 4) & 0xFF; //8 bits
 
-    char rxBuf[11];
+    uint8_t kd_low = (kd >> 8) & 0x0F; //4 bits
+    uint8_t t_high = (torque >> 8) & 0x0F; //4 bits
 
-    int spi_err = jetson_spi_tx(spi_handle, packet, rxBuf); //error code
+    data[6] = ((kd_low << 4) | t_high); //packing 
 
-    if (spi_err < 0){
-        printf("SPI Error");
-        return NULL;
-    }
+    data[7] = (torque >> 4) & 0xFF;
+    
+    return data;
 
-    return rxBuf;   
-    //response frame gives us motor ID (11 bits) followed by the MCU ID
 }
-
-
-char* motor_enable(int spi_handle, char channel, char mode, char motor_id){
-
-    unsigned char data[8];
-
-    for (int i=0; i<7; i++){
-        data[i] = 0xFF;
-    }
-
-    data[7] = 0xFC;
-
-    char rxBuf[11];
-
-    char* packet = gen_can_header_mit(channel, mode, motor_id, data);
-
-    int spi_err = jetson_spi_tx(spi_handle, packet, rxBuf);
-
-    if (spi_err < 0){
-        printf("SPI Error");
-        return NULL;
-    }
-
-    return rxBuf;
-}
-
