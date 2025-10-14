@@ -2,13 +2,13 @@
 #include "jetgpio.h"
 
 
-int jetson_spi_tx(unsigned int spi_handle, uint8_t* packet, uint8_t* rxBuf){
+int rs02_jetson_spi_tx(unsigned int spi_handle, uint8_t* packet, uint8_t* rxBuf){
 
     if (spi_handle < 0){
         printf("SPI was not setup correctly. Transfer cancelled.");
         return -1;
     }
-
+ 
     size_t packet_len = sizeof(packet) / sizeof(packet[0]);
     unsigned int len = (unsigned int)packet_len; //number of bytes to send
 
