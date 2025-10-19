@@ -48,7 +48,8 @@ uint8_t* rs02_gen_can_header(char channel,  char mode, char motor_id, char* data
 }
 
 
-uint8_t* rs02_mit(float angle, float speed, float kp, float kd, float torque){
+ 
+uint8_t* rs02_mit_data(float angle, float speed, float kp, float kd, float torque){
     
     /*Ranges
     --------
