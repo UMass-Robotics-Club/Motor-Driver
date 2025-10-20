@@ -40,12 +40,13 @@ int rs02_jetson_spi_tx(unsigned int spi_handle, uint8_t* packet, uint8_t* rxBuf)
 
 
 /// @brief generates packet to send over SPI 
+/// @param ext boolean extended frame or not
 /// @param channel 1-6
 /// @param mode part of arbitration
 /// @param motor_id part of arbitration
 /// @param data 
-/// @returns can header 
-uint8_t* rs02_gen_can_header(char channel,  char mode, char motor_id, char* data);
+/// @returns spi tx packet
+uint8_t* rs02_spi_tx_packet(int ext, uint8_t channel,  uint32_t arbitration, uint8_t* data);
 
 
 /// @brief generic method to generate 8-byte data packet for MIT protocol

@@ -18,32 +18,50 @@ int rs02_jetson_spi_tx(unsigned int spi_handle, uint8_t* packet, uint8_t* rxBuf)
 }
 
 
-uint8_t* rs02_gen_can_header(char channel,  char mode, char motor_id, char* data){
-/*Format: [channel: 1 byte | id: 2 bytes | data: 8 bytes] = 11 bytes
-  
-  ID is separated into two parts: the mode of operation of the motor (byte 1 bits 0,1,2. 
-  Other bits are don't care and should be masked out) followed by the CAN ID of the device to control (byte 2)
+uint8_t* rs02_spi_tx_packet(int ext, uint8_t channel,  uint32_t arbitration, uint8_t* data){
+/* Standard Format: [ext: 1 byte | channel: 1 byte | 2 don't care bytes | id: 2 bytes | data: 8 bytes] = 14 bytes
+   Extended Format: [ext: 1 byte | channel: 1 byte | id: 4 bytes | data: 8 bytes] = 14 bytes 
+
+  arbitration in standard is separated into two parts: the mode of operation of the motor (byte 2 [2:0]). 
+  Other bits are don't care and can be masked out) followed by the CAN ID of the device to control (byte 3)
   
   Data is just 8 bytes of straight data. (bytes 3 to 10)
 
-  The length of the CAN message is 11 bits + 8 bytes
+  The length of a standard CAN message is 11 bits + 8 bytes = 11 bytes total
+  Ext is 13 bytes total
+
   The additional channel byte should be used by the Mega CAN board to choose a CAN channel to communicate on.
 */
-    
-    uint8_t out[11];
-    
+
+    uint8_t out[14];
+
     //Channel
-    out[0] = channel; //byte 0
+    out[1] = channel; 
     
-    //ID
-    out[1] = mode; //byte 1
-    out[2] = motor_id; //byte 2
-    
-    //Data
-    for (int j=0; j<8; j++){ //bytes 3 to 10
-        out[j+3] = data[j]; //offset of 3
+    if (ext == 0){
+        //Standard 2-byte arbitration
+        //we don't need the first two bytes here
+        out[0] = 0;
+        out[4] = (arbitration >> 8) & 0xFF; //take only the first byte 
+        out[5] = arbitration & 0xFF; //take only the second byte 
+        
     }
 
+    else {
+        //Extended ID
+        out[0] = 1; //ext
+        out[2] = (arbitration >> 24) & 0xFF; //first byte 
+        out[3] = (arbitration >> 16) & 0xFF; //secong byte
+        out[4] = (arbitration >> 8) & 0xFF; //third
+        out[5] = arbitration & 0xFF; //last
+
+    }
+    
+    //Data
+    for (int j=0; j<8; j++){
+        out[j+6] = data[j]; //offset by 6 bytes
+    }
+    
     return out;
 }
 
