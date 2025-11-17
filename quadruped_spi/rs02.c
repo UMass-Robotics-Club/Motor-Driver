@@ -3,6 +3,7 @@
 
 
 int rs02_jetson_spi_tx(unsigned int spi_handle, uint8_t* packet, uint8_t* rxBuf){
+//interestingly this works for pigpio on the rpi as well, so no changes need to be made here
 
     if (spi_handle < 0){
         printf("SPI was not setup correctly. Transfer cancelled.");
@@ -38,6 +39,8 @@ uint8_t* rs02_spi_tx_packet(int ext, uint8_t channel,  uint32_t arbitration, uin
     //Channel
     out[1] = channel; 
     
+
+    //Arbitration
     if (ext == 0){
         //Standard 2-byte arbitration
         //we don't need the first two bytes here
@@ -64,7 +67,6 @@ uint8_t* rs02_spi_tx_packet(int ext, uint8_t channel,  uint32_t arbitration, uin
     
     return out;
 }
-
 
  
 uint8_t* rs02_mit_data(float angle, float speed, float kp, float kd, float torque){
@@ -134,7 +136,7 @@ uint8_t* rs02_mit_data(float angle, float speed, float kp, float kd, float torqu
 
 
     //Bit packing
-    uint8_t data[11];
+    uint8_t data[8];
 
     //Angle
     data[0] = (angle_int >> 8) & 0xFF;  //high 8 bits
