@@ -1,5 +1,5 @@
 SRC = main.c
-PI_INC = rs02.c pigpio.c
+PI_INC = rs02.c pigpio.c command.c
 JET_INC = rs02.c jetgpio.c
 
 PI_OBJ = $(PI_INC:%.c=%.o)
