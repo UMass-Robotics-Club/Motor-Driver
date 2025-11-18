@@ -94,8 +94,8 @@ uint8_t* rs02_mit_data(float angle, float speed, float kp, float kd, float torqu
 
     float angle_f;
     float speed_f;
-    float kp_f;
-    float kd_f;
+    float kp_f = 3;
+    float kd_f = 0.2; //setting defaults for now 
     float torque_f;
 
 

@@ -1,6 +1,6 @@
 #include "rs02.h"
 //motor already includes jetgpio
-#include <pigpio.h>
+#include <lgpio.h>
 
 #define SPI_CHAN 0
 #define SPI_MODE 0
@@ -22,27 +22,30 @@ int main(){
     int handle = spiOpen(SPI_CHAN, 5000000, SPI_MODE, 0, 8, 1, 1); //SPI 1
     */
 
-    /*RPI 5 SPI setup*/
-    if (gpioInitialise() < 0){
-        fprintf(stderr, "pigpio failed to start.");
-        return 1;
-    }
+    /*RPI 5 LGPIO SPI setup*/
+    chip = lgGPIOchipOpen(0);
 
-    uint32_t spiflags = 0; 
-    spiflags |= (14 << 10); //read 14 bytes before switching MOSI to MISO
-    int handle = spiOpen(SPI_CHAN, 500000, spiflags); //SPI 1
+    if (chip >= 0) fprintf (stdout, "open successful\n");
 
+    else fprintf(stderr, "lgpio init failed\n");
+    handle = lgSpiOpen(0, 0, 500000, 0);
 
 
     uint8_t id = 0; //CAN_ID placeholder
     uint8_t rxpacket[11]; //response packet
     uint8_t* txpacket = rs02_spi_tx_packet(0, SPI_MODE, id, RS02_ENABLE_DATA);
     
-    rs02_jetson_spi_tx(handle, txpacket, rxpacket);
+    //rs02_jetson_spi_tx(handle, txpacket, rxpacket);
 
-    print_packet(rxpacket, sizeof(rxpacket));
+    if (lgSpiXfer(handle, txpacket, rxpacket, sizeof(txpacket)) > 0){
+        fprintf(stdout, "SPI transfer okay\n");
+        print_packet(rxpacket, sizeof(rxpacket));
+    }
+
+    else fprintf(stderr, "SPI transfer error\n");
+
     
-    spiClose(handle);
-    gpioTerminate();
+    lgSpiClose(handle);
+    lgGpiochipClose(chip);
     return 0;
 }
