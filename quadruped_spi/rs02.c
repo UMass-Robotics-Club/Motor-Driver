@@ -2,7 +2,7 @@
 
 //#include "jetgpio.h"
 
-#include "pigpio.h"
+#include <lgpio.h>
 
 
 // int rs02_jetson_spi_tx(unsigned int spi_handle, uint8_t* packet, uint8_t* rxBuf){
@@ -37,7 +37,7 @@ uint8_t* rs02_spi_tx_packet(int ext, uint8_t channel,  uint32_t arbitration, uin
   The additional channel byte should be used by the Mega CAN board to choose a CAN channel to communicate on.
 */
 
-    uint8_t out[14];
+    static uint8_t out[14];
 
     //Channel
     out[1] = channel; 
@@ -139,7 +139,7 @@ uint8_t* rs02_mit_data(float angle, float speed, float kp, float kd, float torqu
 
 
     //Bit packing
-    uint8_t data[8];
+    static uint8_t data[8];
 
     //Angle
     data[0] = (angle_int >> 8) & 0xFF;  //high 8 bits
