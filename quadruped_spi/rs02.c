@@ -1,5 +1,8 @@
 #include "rs02.h"
-#include "jetgpio.h"
+
+//#include "jetgpio.h"
+
+#include "pigpio.h"
 
 
 int rs02_jetson_spi_tx(unsigned int spi_handle, uint8_t* packet, uint8_t* rxBuf){
