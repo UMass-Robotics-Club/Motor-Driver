@@ -23,12 +23,12 @@ int main(){
     */
 
     /*RPI 5 LGPIO SPI setup*/
-    chip = lgGPIOchipOpen(0);
+    int chip = lgGPIOchipOpen(0);
 
     if (chip >= 0) fprintf (stdout, "open successful\n");
 
     else fprintf(stderr, "lgpio init failed\n");
-    handle = lgSpiOpen(0, 0, 500000, 0);
+    int handle = lgSpiOpen(0, 0, 500000, 0);
 
 
     uint8_t id = 0; //CAN_ID placeholder
