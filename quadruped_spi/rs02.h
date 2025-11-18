@@ -17,11 +17,12 @@ Bits [7:0] = Device ID
 Bytes 0-7 = Data
 */
 
-/*--------------------------Constant Packets--------------------------*/
+
+/*--------------------------Constant Packets--------------------------
 #define RS02_MIT_MODE_DATA {0x0F, 0xFF, 1, 2, 3, 4, 5, 6, 2, 0, 0}   
 #define RS02_ENABLE_DATA {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFC}
 #define RS02_DISABLE_DATA {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFD}
-#define RSO2_SET_ZERO_POS_DATA {0xFF, 0XFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFE} //works in non position mode
+#define RSO2_SET_ZERO_POS_DATA {0xFF, 0XFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFE} //works in non position mode */
 
 
 /*-------------------------------Methods----------------------------------*/
