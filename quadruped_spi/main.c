@@ -37,15 +37,18 @@ int main(){
     
     //rs02_jetson_spi_tx(handle, txpacket, rxpacket);
 
-    if (lgSpiXfer(handle, txpacket, rxpacket, sizeof(txpacket)) > 0){
+    int err = lgSpiXfer(handle, txpacket, rxpacket, sizeof(txpacket));
+
+    if (err >= 0){
         fprintf(stdout, "SPI transfer okay\n");
         print_packet(rxpacket, sizeof(rxpacket));
     }
 
-    else fprintf(stderr, "SPI transfer error\n");
+    else fprintf(stderr, "SPI transfer error: %d\n", err);
 
     
     lgSpiClose(handle);
+    fprintf(stdout, "SPI closed\n");
     lgGpiochipClose(chip);
     return 0;
 }
