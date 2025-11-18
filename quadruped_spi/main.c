@@ -23,9 +23,9 @@ int main(){
     */
 
     /*RPI 5 LGPIO SPI setup*/
-    int chip = lgGPIOchipOpen(0);
+    int chip = lgGpiochipOpen(0);
 
-    if (chip >= 0) fprintf (stdout, "open successful\n");
+    if (chip >= 0) fprintf(stdout, "open successful\n");
 
     else fprintf(stderr, "lgpio init failed\n");
     int handle = lgSpiOpen(0, 0, 500000, 0);
