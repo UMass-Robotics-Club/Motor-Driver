@@ -26,12 +26,12 @@ int main(){
     uint32_t spiflags = 0; 
     spiflags |= (14 << 10); //read 14 bytes before switching MOSI to MISO
     int handle = spiOpen(SPI_CHAN, 500000, spiflags); //SPI 1
-    
+
 
 
     uint8_t id = 0; //CAN_ID placeholder
     uint8_t rxpacket[11]; //response packet
-    uint8_t txpacket[11] = rs02_spi_tx_packet(handle, SPI_MODE, id, (uint16_t) RS02_ENABLE_DATA);
+    uint8_t txpacket[11] = rs02_spi_tx_packet(handle, SPI_MODE, id, RS02_ENABLE_DATA);
     
     rs02_jetson_spi_tx(handle, txpacket, rxpacket);
 
