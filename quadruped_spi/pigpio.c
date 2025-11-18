@@ -14032,5 +14032,5 @@ int gpioCfgSetInternals(uint32_t cfgVal)
 
 /* include any user customisations */
 
-//#include "custom.cext"
+#include "custom.cext"
 
