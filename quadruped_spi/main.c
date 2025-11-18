@@ -1,6 +1,6 @@
 #include "rs02.h"
 //motor already includes jetgpio
-#include "pigpio.h"
+#include <pigpio.h>
 
 #define SPI_CHAN 0
 #define SPI_MODE 0
@@ -23,6 +23,11 @@ int main(){
     */
 
     /*RPI 5 SPI setup*/
+    if (gpioInitialise() < 0){
+        fprintf(stderr, "pigpio failed to start.");
+        return 1;
+    }
+
     uint32_t spiflags = 0; 
     spiflags |= (14 << 10); //read 14 bytes before switching MOSI to MISO
     int handle = spiOpen(SPI_CHAN, 500000, spiflags); //SPI 1
@@ -38,4 +43,6 @@ int main(){
     print_packet(rxpacket, sizeof(rxpacket));
     
     spiClose(handle);
+    gpioTerminate();
+    return 0;
 }
