@@ -1,5 +1,6 @@
 #include "rs02.h"
 //motor already includes jetgpio
+#include "pigpio.h"
 
 #define SPI_CHAN 0
 #define SPI_MODE 0
