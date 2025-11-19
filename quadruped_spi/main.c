@@ -44,7 +44,7 @@ int main(){
 
     usleep(1000000);
 
-    lgSpiRead(handle, rxpacket, 14);
+    lgSpiXfer(handle, txpacket, rxpacket, 14);
 
     if (err >= 0){
         fprintf(stdout, "SPI transfer okay\n");
