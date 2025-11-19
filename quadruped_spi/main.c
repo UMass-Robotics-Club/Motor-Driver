@@ -39,7 +39,6 @@ int main(){
     
     //rs02_jetson_spi_tx(handle, txpacket, rxpacket);
 
-    lgSpiXfer(handle, txpacket, rxpacket, 14); //dummy send
     int err = lgSpiXfer(handle, txpacket, rxpacket, 14);
 
     if (err >= 0){
