@@ -26,13 +26,6 @@ Bytes 0-7 = Data
 
 
 /*-------------------------------Methods----------------------------------*/
-/// @brief sends CAN packet over SPI to SPI-to-CAN board
-/// @param spi_handle int handle returned when spiOpen() is called
-/// @param packet 
-/// @param rxBuf response buffer
-/// @returns 0 if successful  
-int rs02_jetson_spi_tx(unsigned int spi_handle, uint8_t* packet, uint8_t* rxBuf);
-
 
 /// @brief generates packet to send over SPI 
 /// @param ext boolean extended frame or not

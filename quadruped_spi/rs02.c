@@ -5,22 +5,6 @@
 #include <lgpio.h>
 
 
-// int rs02_jetson_spi_tx(unsigned int spi_handle, uint8_t* packet, uint8_t* rxBuf){
-// //interestingly this works for pigpio on the rpi as well, so no changes need to be made here
-
-//     if (spi_handle < 0){
-//         printf("SPI was not setup correctly. Transfer cancelled.");
-//         return -1;
-//     }
- 
-//     size_t packet_len = sizeof(packet) / sizeof(packet[0]);
-//     unsigned int len = (unsigned int)packet_len; //number of bytes to send
-
-//     spiXfer(spi_handle, packet, rxBuf, len);
-    
-//     return 0;
-// }
-
 
 uint8_t* rs02_spi_tx_packet(int ext, uint8_t channel,  uint32_t arbitration, uint8_t* data){
 /* Standard Format: [ext: 1 byte | channel: 1 byte | 2 don't care bytes | id: 2 bytes | data: 8 bytes] = 14 bytes
