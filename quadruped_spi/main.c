@@ -37,13 +37,15 @@ int main(){
     
     //rs02_jetson_spi_tx(handle, txpacket, rxpacket);
 
-    int err = lgSpiXfer(handle, txpacket, rxpacket, 14);
+    int write_err = lgSpiWrite(handle, txpacket, 14);
+    int read_err = lgSpiRead(handle, rxpacket, 14);
 
-    if (err >= 0){
+
+    if (write_err >= 0){
         fprintf(stdout, "SPI transfer okay\n");
         fprintf(stdout, "Transferred: ");
         print_packet(txpacket, 14);
-        fprintf(stdout, "Recieved: ");
+        fprintf(stdout, "Received: ");
         print_packet(rxpacket, 14);
     }
 
