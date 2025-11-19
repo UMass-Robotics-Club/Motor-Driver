@@ -33,17 +33,11 @@ int main(){
 
 
     uint8_t id = 0; //CAN_ID placeholder
-    uint8_t rxdummy[14];
-    uint8_t txdummy[14];
     uint8_t* txpacket = rs02_spi_tx_packet(0, SPI_MODE, id, RS02_ENABLE_DATA);
-    uint8_t rxpacket[14];
+    uint8_t rxpacket[14] = {0};
 
     int err = 1;
     
-    lgSpiWrite(handle, txpacket, 14);
-
-    usleep(1000000);
-
     lgSpiXfer(handle, rxpacket, txpacket, 14);
 
     if (err >= 0){
