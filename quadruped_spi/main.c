@@ -42,7 +42,7 @@ int main(){
     int err = lgSpiRead(handle, rxpacket, 14);
 
     if (err >= 0){
-        fprintf(stdout, "SPI transfer okay\n");
+        fprintf(stdout, "SPI transfer successful; code: %d\n", err);
         fprintf(stdout, "Transferred: ");
         print_packet(txpacket, 14);
         fprintf(stdout, "Received: ");
