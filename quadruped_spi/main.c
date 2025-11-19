@@ -49,7 +49,7 @@ int main(){
         print_packet(rxpacket, 14);
     }
 
-    else fprintf(stderr, "SPI transfer error: %d\n", err);
+    else fprintf(stderr, "SPI read error: %d; write error: %d\n", read_err, write_err);
     
     lgSpiClose(handle);
     fprintf(stdout, "SPI closed\n");
