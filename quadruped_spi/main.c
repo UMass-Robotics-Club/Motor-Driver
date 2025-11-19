@@ -33,7 +33,7 @@ int main(){
 
 
     uint8_t id = 0; //CAN_ID placeholder
-    uint8_t rxpacket[14]; //response packet
+    uint8_t rxpacket[14] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14}; //response packet
     uint8_t dummy[14] = {0};
     uint8_t* txpacket = rs02_spi_tx_packet(0, SPI_MODE, id, RS02_ENABLE_DATA);
     
