@@ -40,9 +40,11 @@ int main(){
 
     int err = 1;
     
-    lgSpiXfer(handle, txpacket, rxdummy, 14);
+    lgSpiWrite(handle, txpacket, 14);
 
-    lgSpiXfer(handle, txdummy, rxpacket, 14);
+    usleep(1000000);
+
+    lgSpiRead(handle, rxpacket, 14);
 
     if (err >= 0){
         fprintf(stdout, "SPI transfer okay\n");
