@@ -1,5 +1,6 @@
 #include "rs02.h"
 //motor already includes jetgpio
+#include <unistd.h>
 #include <lgpio.h>
 
 #define SPI_CHAN 0
@@ -37,20 +38,23 @@ int main(){
     
     //rs02_jetson_spi_tx(handle, txpacket, rxpacket);
 
-    //int write_err = lgSpiWrite(handle, txpacket, 14);
-    int read_err = lgSpiRead(handle, rxpacket, 14);
+    while (1){
+        //int write_err = lgSpiWrite(handle, txpacket, 14);
+        int read_err = lgSpiRead(handle, rxpacket, 14);
 
 
-    if (read_err >= 0){
-        fprintf(stdout, "SPI transfer okay\n");
-        fprintf(stdout, "Transferred: ");
-        print_packet(txpacket, 14);
-        fprintf(stdout, "Received: ");
-        print_packet(rxpacket, 14);
+        if (read_err >= 0){
+            fprintf(stdout, "SPI transfer okay\n");
+            fprintf(stdout, "Transferred: ");
+            print_packet(txpacket, 14);
+            fprintf(stdout, "Received: ");
+            print_packet(rxpacket, 14);
+        }
+
+        else fprintf(stderr, "SPI transfer error: %d\n", read_err);
+
+        usleep(1000000);
     }
-
-    else fprintf(stderr, "SPI transfer error: %d\n", read_err);
-
     
     lgSpiClose(handle);
     fprintf(stdout, "SPI closed\n");
