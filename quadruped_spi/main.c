@@ -48,9 +48,9 @@ int main(){
 
     if (err >= 0){
         fprintf(stdout, "SPI transfer okay\n");
-        fprintf(stdout, "Transferred: ");
+        fprintf(stdout, "TX: ");
         print_packet(txpacket, 14);
-        fprintf(stdout, "Received: ");
+        fprintf(stdout, "RX: ");
         print_packet(rxpacket, 14);
     }
 
