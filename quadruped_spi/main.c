@@ -34,14 +34,15 @@ int main(){
 
     uint8_t id = 0; //CAN_ID placeholder
     uint8_t rxpacket[14]; //response packet
+    uint8_t dummy[14] = {0};
     uint8_t* txpacket = rs02_spi_tx_packet(0, SPI_MODE, id, RS02_ENABLE_DATA);
     
     //rs02_jetson_spi_tx(handle, txpacket, rxpacket);
 
-    //int write_err = lgSpiWrite(handle, txpacket, 14);
-    int read_err = lgSpiXfer(handle, txpacket, rxpacket, 14);
+    lgSpiXfer(handle, txpacket, rxpacket, 14); //dummy send
+    int err = lgSpiXfer(handle, txpacket, rxpacket, 14);
 
-    if (read_err >= 0){
+    if (err >= 0){
         fprintf(stdout, "SPI transfer okay\n");
         fprintf(stdout, "Transferred: ");
         print_packet(txpacket, 14);
@@ -49,7 +50,7 @@ int main(){
         print_packet(rxpacket, 14);
     }
 
-    else fprintf(stderr, "SPI transfer error: %d\n", read_err);
+    else fprintf(stderr, "SPI transfer error: %d\n", err);
     
     lgSpiClose(handle);
     fprintf(stdout, "SPI closed\n");
