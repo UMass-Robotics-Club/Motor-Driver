@@ -40,7 +40,7 @@ int main(){
 
     while (1){
         //int write_err = lgSpiWrite(handle, txpacket, 14);
-        int read_err = lgSpiRead(handle, rxpacket, 14);
+        int read_err = lgSpiXfer(handle, txpacket, rxpacket, 14);
 
         if (read_err >= 0){
             fprintf(stdout, "SPI transfer okay\n");
@@ -51,7 +51,6 @@ int main(){
         }
 
         else fprintf(stderr, "SPI transfer error: %d\n", read_err);
-
     }
     
     lgSpiClose(handle);
