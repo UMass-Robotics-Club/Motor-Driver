@@ -33,18 +33,10 @@ int main(){
 
 
     uint8_t id = 0; //CAN_ID placeholder
-    uint8_t rxdummy[14] = {0};
-    uint8_t txdummy[14] = {0};
     uint8_t* txpacket = rs02_spi_tx_packet(0, SPI_MODE, id, RS02_ENABLE_DATA);
     uint8_t rxpacket[14] = {0};
 
-    int err = 1;
-    
-    lgSpiXfer(handle, txpacket, rxdummy, 14);
-
-    usleep(1000000);
-
-    lgSpiXfer(handle, txdummy, rxpacket, 14);
+    int err = lgSpiXfer(handle, txpacket, rxpacket, 14);
 
     if (err >= 0){
         fprintf(stdout, "SPI transfer okay\n");
