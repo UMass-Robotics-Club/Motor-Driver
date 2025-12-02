@@ -4,6 +4,11 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 
+
+
+
+//192.168.1.100
+
 int main() {
     int sock = 0;
     struct sockaddr_in serv_addr;

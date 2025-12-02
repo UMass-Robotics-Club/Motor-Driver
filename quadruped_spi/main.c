@@ -36,7 +36,9 @@ int main(){
     uint8_t* txpacket = rs02_spi_tx_packet(0, SPI_MODE, id, RS02_ENABLE_DATA);
     uint8_t rxpacket[14] = {0};
 
-    int err = lgSpiXfer(handle, txpacket, rxpacket, 14);
+    int err = lgSpiXfer(handle, txpacket, rxpacket, 14); //send
+
+    int err = lgSpiXfer(handle, txpacket, rxpacket, 14); //receive
 
     if (err >= 0){
         fprintf(stdout, "SPI transfer okay\n");
