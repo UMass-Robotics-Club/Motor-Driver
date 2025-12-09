@@ -33,9 +33,9 @@ int main(){
 
     uint8_t id = 0; //CAN_ID placeholder
     uint8_t* txpacket = rs02_spi_tx_packet(0, SPI_MODE, id, RS02_ENABLE_DATA);
-   
+    uint8_t rxdummy[14] = {0};
 
-    int err = lgSpiWrite(handle, txpacket, sizeof(txpacket)); //send
+    int err = lgSpiXfer(handle, txpacket, rxdummy, sizeof(txpacket)); //send
 
     if (err >= 0){
         fprintf(stdout, "SPI transfer okay\n");
