@@ -34,12 +34,14 @@ int main(){
     uint8_t* txpacket = rs02_spi_tx_packet(0, SPI_MODE, id, RS02_ENABLE_DATA);
     uint8_t rxdummy[14] = {0};
 
-    int err = lgSpiXfer(handle, txpacket, rxdummy, 14); //send
+    int err = lgSpiXfer(handle, txpacket, rxdummy, 1); //send
 
     if (err >= 0){
         fprintf(stdout, "SPI transfer okay\n");
         fprintf(stdout, "TX: ");
-        print_packet(txpacket, 14);
+        print_packet(txpacket, 1);
+        fprintf(stdout, "RX: ");
+        print_packet(rxdummy, 2);
     }
 
     else fprintf(stderr, "SPI transfer error: %d\n", err);
