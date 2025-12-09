@@ -23,8 +23,7 @@ int send_packet_rpi5(int handle, uint8_t* tx_buf, uint8_t* rx_buf, size_t len){
 
     uint8_t rxdummy[2] = {0};
     
-    for (int k; k<len; k++)
-        err = lgSpiXfer(handle, tx_buf+k, rxdummy, 1); //send
+    for (int k=0; k<len; k++){ err = lgSpiXfer(handle, tx_buf+k, rxdummy, 1); }//send
 
     return err;
 }
