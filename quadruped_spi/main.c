@@ -22,20 +22,30 @@ int main(){
     int handle = spiOpen(SPI_CHAN, 5000000, SPI_MODE, 0, 8, 1, 1); //SPI 1
     */
 
-    /*RPI 5 LGPIO SPI setup*/
+    /*RPI 5 LGPIO SPI setup
     int chip = lgGpiochipOpen(0);
 
     if (chip >= 0) fprintf(stdout, "open successful\n");
 
     else fprintf(stderr, "lgpio init failed\n");
     int handle = lgSpiOpen(0, 0, 1000000, 0);
+    lgSpiSetNoCs(handle, 1); 
 
-
-    uint8_t id = 0; //CAN_ID placeholder
+    uint8_t id = 0; //CAN_ID placeholder  */
     uint8_t* txpacket = rs02_spi_tx_packet(0, SPI_MODE, id, RS02_ENABLE_DATA);
     uint8_t rxdummy[14] = {0};
 
-    int err = lgSpiXfer(handle, txpacket, rxdummy, 14); //send
+    int handle = lgSpiOpen(0, 0, 1000000, 0);
+    lgSpiSetNoCs(handle, 1);              // disable hardware CS
+    int ce0_gpio = 8;
+    lgGpioSetMode(chip, ce0_gpio, 1);    
+    lgGpioWrite(chip, ce0_gpio, 1);      // CS idle high
+
+    lgGpioWrite(chip, ce0_gpio, 0);      // CS LOW
+    int err = lgSpiXfer(handle, txpacket, rxdummy, 14);
+    lgGpioWrite(chip, ce0_gpio, 1);      // CS HIGH
+
+    //int err = lgSpiXfer(handle, txpacket, rxdummy, 14); //send
 
     if (err >= 0){
         fprintf(stdout, "SPI transfer okay\n");
