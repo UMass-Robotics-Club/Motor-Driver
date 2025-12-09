@@ -29,8 +29,7 @@ int main(){
 
     else fprintf(stderr, "lgpio init failed\n");
     int handle = lgSpiOpen(0, 0, 1000000, 0);
-    lgSpiSetNoCs(handle, 1); 
-
+    
     uint8_t id = 0; //CAN_ID placeholder
     uint8_t* txpacket = rs02_spi_tx_packet(0, SPI_MODE, id, RS02_ENABLE_DATA);
     uint8_t rxdummy[14] = {0};
