@@ -58,7 +58,7 @@ int main(){
 
     uint8_t rxpacket[14]; 
     uint8_t* txpacket = rs02_spi_tx_packet(0, 1, id, RS02_ENABLE_DATA);
-    send_packet_rpi5(handle, txpacket, rxpacket, 14);
+    err = send_packet_rpi5(handle, txpacket, rxpacket, 14);
 
     if (err >= 0){
         fprintf(stdout, "SPI transfer okay\n");
