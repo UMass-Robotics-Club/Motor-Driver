@@ -1,5 +1,5 @@
 #include "rs02.h"
-//motor already includes jetgpio
+//rs02 includes jetgpio
 #include <unistd.h>
 #include <lgpio.h>
 
