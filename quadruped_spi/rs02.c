@@ -2,8 +2,9 @@
 
 //#include "jetgpio.h"
 
-#include <lgpio.h>
+//#include <lgpio.h>
 
+#include <wiringPi.h>
 
 
 uint8_t* rs02_spi_tx_packet(int ext, uint8_t channel,  uint32_t arbitration, uint8_t* data){
