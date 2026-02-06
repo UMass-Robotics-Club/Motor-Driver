@@ -21,11 +21,11 @@ PI5_MAIN_OBJ = $(PI5_SRC:%.c=%.o)
 
 
 #pi4 recipe
-pi4_main: main_pi4.o $(PI4_OBJ)
+pi4: main_pi4.o $(PI4_OBJ)
 	gcc $^ $(PI4_LIB) -o $@
 
 #pi5 recipe
-pi5_main: main_pi5.o $(PI5_OBJ) 
+pi5: main_pi5.o $(PI5_OBJ) 
 	gcc $^ $(PI5_LIB) -o $@ 
 
 #jetson recipe
