@@ -50,13 +50,13 @@ int main(){
     //int err = send_packet_rpi4(handle, data_buffer, 14);
     fprintf(stdout, "TX: ");
     print_packet(data_buffer, 14);
-    int err = wiringPiSPIDataRW(SPI_CHAN, data_buffer, 14);
+    int err = send_packet_rpi4(SPI_CHAN, data_buffer, 14);
 
 
     if (err >= 0){
         fprintf(stdout, "SPI transfer successful\n");
-        fprintf(stdout, "RX: ");
-        print_packet(data_buffer, 14);
+        fprintf(stdout, "RX unavailable\n");
+        //print_packet(data_buffer, 14);
     }
 
     else fprintf(stderr, "SPI transfer error: %d\n", err);
