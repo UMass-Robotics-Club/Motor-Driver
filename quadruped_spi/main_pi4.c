@@ -3,7 +3,6 @@
 #include <unistd.h>
 #include <wiringPi.h>
 #include <wiringPiSPI.h>
-#include <errno.h>
 
 #define SPI_CHAN 0
 #define SPI_MODE 0
@@ -37,9 +36,9 @@ int main(){
 
     /*PI4(WiringPI) Setup*/
 
-    if ((int myFd = wiringPiSPISetupMode(SPI_CHAN, 1000000, SPI_MODE)) < 0){
-        fprintf(stderr, "Can't open the SPI bus: %s\n", perror(errno)) ;
-        exit(EXIT_FAILURE);
+    int spiFd = 0;
+    if ((spiFd = wiringPiSPISetupMode(SPI_CHAN, 1000000, SPI_MODE)) < 0){
+        fprintf(stderr, "Can't open the SPI bus");
     }
 
 
