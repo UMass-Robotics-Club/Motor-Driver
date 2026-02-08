@@ -1,1 +1,6 @@
 venv
+.vscode/
+quadruped_spi/.o
+pi4
+pi5
+jet_main
