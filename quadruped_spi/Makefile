@@ -6,10 +6,9 @@ JET_INC = rs02.c jetgpio.c
 
 
 PI5_LIB = -llgpio -lpthread -lrt
-PI5_OBJ = $(PI_INC:%.c=%.o)
-
 PI4_LIB = -lwiringPi -lwiringPiDev -lpthread -lm -lcrypt -lrt
-PI4_OBJ = $(PI_INC:%.c=%.o)
+
+PI_OBJ = $(PI_INC:%.c=%.o)
 
 
 JET_OBJ = $(JET_INC:%.c=%.o)
@@ -22,11 +21,11 @@ PI5_MAIN_OBJ = $(PI5_SRC:%.c=%.o)
 
 
 #pi4 recipe
-pi4: main_pi4.o $(PI4_OBJ)
+pi4: main_pi4.o $(PI_OBJ)
 	gcc $^ $(PI4_LIB) -o $@
 
 #pi5 recipe
-pi5: main_pi5.o $(PI5_OBJ) 
+pi5: main_pi5.o $(PI_OBJ) 
 	gcc $^ $(PI5_LIB) -o $@ 
 
 #jetson recipe
