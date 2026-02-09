@@ -46,6 +46,7 @@ int main(){
 
 
     uint8_t* data_buffer = rs02_spi_tx_packet(0, 1, id, RS02_ENABLE_DATA); //for output on can controller 1 with id 1 with enable command
+    //data_buffer = rs02_spi_tx_packet(1, 1, id, RS02_MIT_MODE_DATA);
     
     //int err = send_packet_rpi4(handle, data_buffer, 14);
     fprintf(stdout, "TX: ");
