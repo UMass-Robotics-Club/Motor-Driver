@@ -5,8 +5,6 @@
 #include <arpa/inet.h>
 
 
-
-
 //192.168.1.100
 
 int main() {
