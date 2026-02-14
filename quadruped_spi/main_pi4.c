@@ -1,5 +1,4 @@
 #include "rs02.h"
-//rs02 includes jetgpio
 #include <unistd.h>
 #include <wiringPi.h>
 #include <wiringPiSPI.h>
@@ -46,6 +45,9 @@ int main(){
 
 
     uint8_t* data_buffer = rs02_spi_tx_packet(0, 1, id, RS02_ENABLE_DATA); //for output on can controller 1 with id 1 with enable command
+    //data_buffer = rs02_spi_tx_packet(1, 1, id, RS02_MIT_MODE_DATA);
+    //uint8_t* movement_data = rs02_mit_data(90, 2, 3, 0.2, 1);
+    //data_buffer = rs02_spi_tx_packet(0, 1, id, movement_data);
     
     //int err = send_packet_rpi4(handle, data_buffer, 14);
     fprintf(stdout, "TX: ");
