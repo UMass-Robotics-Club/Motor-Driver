@@ -10,9 +10,9 @@ AK60_POWER_SETPOINT = 0x00
 SPARK_POSITION_SETPOINT = 0x2050100
 ROBORIO_HEARTBEAT = 0x01011840
 
-RS02_ENABLE = 0xFFFFFFFFFFFFFFFC
-RS02_MIT_MODE = 0x0FFF010203040506020000
-RS02_MIT_POS_MODE = 0xFFFFFFFFFFFF01FC
+RS02_ENABLE = b"\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFC"
+RS02_MIT_MODE = b"\x01\x02\x03\x04\x05\x06\x02"
+RS02_MIT_POS_MODE = b"\xFF\xFF\xFF\xFF\xFF\xFF\x01\xFC"
 
 
 
@@ -31,8 +31,9 @@ def gen_power_ak60_packet(channel: int, id: int, power: float) -> bytes:
     return gen_can_header(channel, 4, AK60_POWER_SETPOINT + id) + struct.pack(">i", power * 100000)
 
 
-def gen_rs02_mit_data(channel: int, id: int, data: float) -> bytes:
-    return gen_can_header(channel, 8, id) + struct.pack(">h", data)
+def gen_rs02_mit(channel: int, id: int, data: bytes) -> bytes:
+    print(f"data: {data}")
+    return gen_can_header(channel, len(data), id) + data
 
 
 
